@@ -1,5 +1,5 @@
-var userList = require('./user-list');
+var user = require('./user');
 
 module.exports = {
-    userList: userList.data
+    get: user.get
 };

@@ -9,7 +9,7 @@ var passportJWT = require("passport-jwt");
 var ExtractJwt = passportJWT.ExtractJwt;
 var Strategy = passportJWT.Strategy;
 
-var usersService = require("./user");
+var users = require("./user");
 
 var app = express();
 app.use(passport.initialize());
@@ -30,7 +30,7 @@ jwtOptions.secretOrKey = 'replacethiswithsomethingbiggertwsh';
 var strategy = new Strategy(jwtOptions, function(jwt_payload, next){
 	console.log('strat was called');
 	console.log('payload recieved', jwt_payload);
-	var user = users[_.findIndex(users, {id: jwt_payload.id})];
+	var user = users.get()[_.findIndex(users.get(), {id: jwt_payload.id})];
 		
 	if(user){
 		next(null, user);
@@ -46,7 +46,7 @@ app.get("/", function(req, res){
 });
 
 app.get("/users", function(req, res){
-	res.json({users: users});
+	res.json({users: users.get()});
 });
 
 app.post("/login", function(req, res){
@@ -62,7 +62,7 @@ app.post("/login", function(req, res){
 
 	console.log(name + " " + password);
 
-	var user = users[_.findIndex(users, {name:name})];
+	var user = users.get()[_.findIndex(users.get(), {name:name})];
 	console.log("User: " + user);
 
 	if(!user){
@@ -96,4 +96,15 @@ app.listen(3000, function(){
 });
 
 //fake users
-var users = usersService.userList;
+// var users = [
+// 	{
+// 		id:1,
+// 		name:'bryan',
+// 		password:'1234'
+// 	},
+// 	{
+// 		id:2,
+// 		name:'test',
+// 		password:'test'
+// 	}
+// ];
