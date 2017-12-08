@@ -9,6 +9,8 @@ var passportJWT = require("passport-jwt");
 var ExtractJwt = passportJWT.ExtractJwt;
 var Strategy = passportJWT.Strategy;
 
+var usersService = require("./user");
+
 var app = express();
 app.use(passport.initialize());
 
@@ -41,6 +43,10 @@ passport.use(strategy);
 
 app.get("/", function(req, res){
 	res.json({message: "Expres is working"});
+});
+
+app.get("/users", function(req, res){
+	res.json({users: users});
 });
 
 app.post("/login", function(req, res){
@@ -90,15 +96,4 @@ app.listen(3000, function(){
 });
 
 //fake users
-var users = [
-	{
-		id:1,
-		name:'bryan',
-		password:'1234'
-	},
-	{
-		id:2,
-		name:'test',
-		password:'test'
-	}
-];
+var users = usersService.userList;
